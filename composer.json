@@ -1,0 +1,30 @@
+{
+    "name": "guillaume/insight-dumper",
+    "description": "InsightDumper est un outil de débogage PHP conçu pour offrir aux développeurs une vision claire et approfondie de leurs données au moment du développement.",
+    "keywords": [],
+    "homepage": "https://pixelee.com",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Guillaume\\InsightDumper\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Guillaume Bouyer",
+            "email": "guillaume.bouyer@me.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "^9.5"
+    }
+}
