@@ -1,0 +1,25 @@
+.insight-dump-wrapper {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 5px 0;
+    color: #333;
+}
+
+.insight-dump-string {
+    color: #d14;
+}
+
+.insight-dump-number {
+    color: #098658;
+}
+
+.insight-dump-array {
+    color: #1e6823;
+}
+
+.insight-dump-key {
+    color: #0000ff;
+}
+
+/* Ajoutez d'autres styles selon vos besoins */

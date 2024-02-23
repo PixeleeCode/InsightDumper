@@ -1,9 +1,13 @@
 <?php
 
 require_once 'vendor/autoload.php';
-require_once 'Resources/functions/pp.php';
+require_once 'Resources/functions/in.php';
 
 use Pixelee\InsightDumper\InsightDumper;
+use Pixelee\InsightDumper\Test;
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 $fruits = array (
     "fruits"  => array("a" => "orange", "b" => "banana", "c" => "apple"),
@@ -11,6 +15,7 @@ $fruits = array (
     "holes"   => array("first", 5 => "second", "third")
 );
 
-$stdClass = new stdClass();
+$testClass = new Test();
+$testClass->setTestProperty('yep!');
 
-pp($fruits, $stdClass);
+in($fruits, $testClass, false, 'test', 12.5, 6);
