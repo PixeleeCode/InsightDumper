@@ -45,18 +45,48 @@ final class Render
         $reflection = new \ReflectionObject($var);
         $className = $reflection->getName();
         $properties = $reflection->getProperties();
+        $methods = $reflection->getMethods();
 
-        $output = "<div class='insight-dump-object'>Object of class <strong>{$className}</strong> {";
+        $output = "<div class='insight-dump-object'>Object of class <strong>{$className}</strong> {<br>";
 
+        // Affichage des propriétés
         foreach ($properties as $property) {
-            $property->setAccessible(true); // Permet d'accéder aux propriétés privées et protégées
+            $property->setAccessible(true);
             $propertyName = $property->getName();
-            $propertyValue = $property->getValue($var); // Récupère la valeur de la propriété
+            $propertyValue = $property->getValue($var);
             $propertyType = gettype($propertyValue);
 
-            // Pour un affichage plus sophistiqué, vous pouvez appeler `self::render()` sur `$propertyValue`
-            $output .= "<div class='insight-dump-property'>{$propertyName} ({$propertyType}): ";
+            $output .= "<div class='insight-dump-property'>&nbsp;&nbsp;&nbsp;<strong>$propertyName</strong> ($propertyType): ";
             $output .= self::render($propertyValue);
+            $output .= "</div>";
+        }
+
+        // Affichage des méthodes avec typage
+        if (!empty($methods)) {
+            $output .= "<div class='insight-dump-methods'>&nbsp;&nbsp;Methods:<br>";
+            foreach ($methods as $method) {
+                $methodName = $method->getName();
+                $output .= "<div class='insight-dump-method'>&nbsp;&nbsp;&nbsp;&nbsp;<strong>$methodName</strong>(";
+
+                // Paramètres de la méthode et leurs typages
+                $paramsOutput = [];
+                foreach ($method->getParameters() as $param) {
+                    $paramType = $param->hasType() ? $param->getType() . ' ' : '';
+                    $paramName = $param->getName();
+                    $paramsOutput[] = "$paramType$paramName";
+                }
+                $output .= implode(', ', $paramsOutput);
+
+                // Type de retour de la méthode
+                if ($method->hasReturnType()) {
+                    $returnType = $method->getReturnType();
+                    $output .= "): " . $returnType;
+                } else {
+                    $output .= ")";
+                }
+
+                $output .= "</div>";
+            }
             $output .= "</div>";
         }
 

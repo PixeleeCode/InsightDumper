@@ -3,7 +3,6 @@
 require_once 'vendor/autoload.php';
 require_once 'Resources/functions/in.php';
 
-use Pixelee\InsightDumper\InsightDumper;
 use Pixelee\InsightDumper\Test;
 
 ini_set('display_errors', 1);
