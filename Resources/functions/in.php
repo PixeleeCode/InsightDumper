@@ -1,11 +1,13 @@
 <?php
 
 use Pixelee\InsightDumper\InsightDumper;
+use Pixelee\InsightDumper\Response;
 
-if (!function_exists('pp')) {
-    function pp(mixed ...$vars): mixed
+if (!function_exists('in')) {
+    function in(mixed ...$vars): null|string|array
     {
         $dump = null;
+
         if (!$vars) {
             $dump = InsightDumper::dump('🫣');
         }
@@ -18,10 +20,13 @@ if (!function_exists('pp')) {
             }
         }
 
-        if (1 < count($vars)) {
+        /*if (1 < count($vars)) {
             return $vars;
-        }
+        }*/
 
-        return $dump;
+        $response = new Response($dump);
+        $response->send();
+
+        return null;
     }
 }

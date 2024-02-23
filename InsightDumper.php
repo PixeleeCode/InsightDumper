@@ -2,33 +2,18 @@
 
 namespace Pixelee\InsightDumper;
 
-require_once __DIR__.'/Resources/functions/pp.php';
+require_once __DIR__ . '/Resources/functions/in.php';
 
 final class InsightDumper
 {
-    public static function dump(mixed $vars): mixed
+    public static function dump(mixed $vars): string
     {
-        if (is_array($vars)) {
+        echo '<link rel="stylesheet" type="text/css" href="Resources/css/insight-dumper.css">';
 
-            echo '<div style="color: blue;">Array(' . count($vars) . ')</div><div style="margin-left: 20px;">';
+        $output = '<div class="insight-dump-wrapper">';
+        $output .= Render::render($vars);
+        $output .= '</div>';
 
-            foreach ($vars as $key => $value) {
-                echo '<div style="color: green;">[' . $key . '] => </div>';
-                self::dump($value);
-            }
-
-            echo '</div>';
-        } elseif (is_object($vars)) {
-            echo '<div style="color: #9400D3;">Object(' . get_class($vars) . ')</div><div style="margin-left: 20px;">';
-            foreach (get_object_vars($vars) as $key => $value) {
-                echo '<div style="color: green;">' . $key . ' => </div>';
-                self::dump($value);
-            }
-            echo '</div>';
-        } else {
-            echo '<div style="color: red;">' . htmlspecialchars(print_r($vars, true)) . '</div>';
-        }
-
-        return $vars;
+        return $output;
     }
 }

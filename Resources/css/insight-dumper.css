@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.insight-dump-wrapper {
+    font-family: 'Courier Prime', serif;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 5px 0;
+    color: #333;
+}
+
+.insight-dump-string {
+    color: #d14;
+}
+
+.insight-dump-number {
+    color: #098658;
+}
+
+.insight-dump-array {
+    color: #1e6823;
+}
+
+.insight-dump-key {
+    color: #0000ff;
+}
+
+/* Ajoutez d'autres styles selon vos besoins */
