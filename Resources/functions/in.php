@@ -4,6 +4,17 @@ use Pixelee\InsightDumper\InsightDumper;
 use Pixelee\InsightDumper\Response;
 
 if (!function_exists('in')) {
+
+    /**
+     * A convenient wrapper function for dumping variables.
+     * It supports multiple variables and uses the InsightDumper class for formatting.
+     * It can output a single variable or iterate through multiple variables if more than one is provided.
+     * Also handles sending the output as an HTTP response via the Response class.
+     *
+     * @param mixed ...$vars Variables to be dumped. Accepts multiple inputs.
+     * @return string|array|null Always returns null to indicate the output is sent directly to the HTTP response.
+     * @throws ReflectionException If a reflection error occurs during the dumping process.
+     */
     function in(mixed ...$vars): null|string|array
     {
         $dump = null;
@@ -19,10 +30,6 @@ if (!function_exists('in')) {
                 $dump .= InsightDumper::dump($value);
             }
         }
-
-        /*if (1 < count($vars)) {
-            return $vars;
-        }*/
 
         $response = new Response($dump);
         $response->send();

@@ -1,29 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-
 .insight-dump-wrapper {
-    font-family: 'Courier Prime', serif;
+    font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    background-color: #2D3250;
+    color: #3e7dc2;
     padding: 10px;
-    margin: 5px 0;
-    color: #333;
+    margin-bottom: 5px;
+    border-radius: 6px;
 }
 
 .insight-dump-string {
-    color: #d14;
+    color: #03C988;
 }
 
 .insight-dump-number {
-    color: #098658;
+    color: #00a6ff;
 }
 
-.insight-dump-array {
-    color: #1e6823;
+.insight-dump-boolean--true {
+    color: #07fdac;
 }
 
-.insight-dump-key {
-    color: #0000ff;
+.insight-dump-boolean--false {
+    color: #f83455;
 }
 
-/* Ajoutez d'autres styles selon vos besoins */
+.insight-dump-object-id,
+.insight-dump-null {
+    color: #8187ab;
+}
+
+.insight-dump-object-key,
+.insight-dump-datetime-content,
+.insight-dump-resource {
+    color: #e5e6f3;
+}
+
+.insight-dump-type {
+    color: #f16b4f;
+}
+
+.insight-dump-array-key,
+.insight-dump-object,
+.insight-dump-datetime {
+    color: #ffb700;
+}

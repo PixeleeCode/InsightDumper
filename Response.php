@@ -40,6 +40,6 @@ final class Response
 
     private function sendContent(): void
     {
-        echo $this->content;
+        echo "<pre>$this->content</pre>";
     }
 }
