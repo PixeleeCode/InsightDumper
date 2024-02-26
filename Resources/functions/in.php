@@ -5,6 +5,8 @@ use Pixelee\InsightDumper\Response;
 
 if (!function_exists('in')) {
 
+    define('INSIGHT_DUMPER_START', microtime(true));
+
     /**
      * A convenient wrapper function for dumping variables.
      * It supports multiple variables and uses the InsightDumper class for formatting.
@@ -24,15 +26,17 @@ if (!function_exists('in')) {
         $file = $callerInfo['file'] ?? 'N/A';
         $line = $callerInfo['line'] ?? 'N/A';
 
+        $executionTime = microtime(true) - INSIGHT_DUMPER_START;
+
         if (!$vars) {
-            $dump = InsightDumper::dump('🫣', $file, $line);
+            $dump = InsightDumper::dump('🫣', $file, $line, $executionTime);
         }
 
         if (array_key_exists(0, $vars) && 1 === count($vars)) {
-            $dump = InsightDumper::dump($vars[0], $file, $line);
+            $dump = InsightDumper::dump($vars[0], $file, $line, $executionTime);
         } else {
             foreach ($vars as $value) {
-                $dump .= InsightDumper::dump($value, $file, $line);
+                $dump .= InsightDumper::dump($value, $file, $line, $executionTime);
             }
         }
 

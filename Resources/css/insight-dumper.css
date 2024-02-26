@@ -1,52 +1,56 @@
 .insight-dump-wrapper {
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
-    background-color: #2D3250; /* Fond sombre */
-    color: #B0BEC5; /* Texte principal plus clair pour le contraste */
+    background-color: #2D3250;
+    color: #c4cfdb;
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 6px;
-    border: 1px solid #424769; /* Bordure légèrement plus claire */
+    border: 1px solid #424769;
 }
 
 .insight-dump-wrapper p {
     margin: 0;
-    padding: 0 0 10px 0;
+    padding: 0;
+}
+
+.insight-dump-wrapper p:last-of-type {
+    padding-bottom: 15px;
 }
 
 .insight-dump-string {
-    color: #009f69; /* Jaune plus doux pour les chaînes */
+    color: #009f69;
 }
 
 .insight-dump-number {
-    color: #81D4FA; /* Bleu clair pour les nombres */
+    color: #81D4FA;
 }
 
 .insight-dump-boolean--true {
-    color: #07fdac; /* Vert doux pour true */
+    color: #07fdac;
 }
 
 .insight-dump-boolean--false {
-    color: #ff1137; /* Rouge doux pour false */
+    color: #ff3757;
 }
 
 .insight-dump-object-id,
 .insight-dump-null {
-    color: #8187ab; /* Violet clair pour les ID d'objet et null */
+    color: #8187ab;
 }
 
 .insight-dump-object-key,
 .insight-dump-datetime-content,
 .insight-dump-resource {
-    color: #f4faff; /* Bleu pâle pour les clés d'objet, le contenu datetime et les ressources */
+    color: #f4faff;
 }
 
 .insight-dump-type {
-    color: #F48FB1; /* Rose pour les types (array, object, etc.) */
+    color: #F48FB1;
 }
 
 .insight-dump-array-key,
 .insight-dump-object,
 .insight-dump-datetime {
-    color: #ffcf30; /* Orange pour les clés de tableau, les noms d'objet et les balises datetime */
+    color: #ffcf30;
 }
