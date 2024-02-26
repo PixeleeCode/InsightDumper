@@ -73,10 +73,10 @@ final class Render
         $dayOfYear = $var->format('z') + 1;
         $weekOfYear = $var->format('W');
         $isLeapYear = $var->format('L') === '1' ? 'true' : 'false';
-        $isLeapYearContent = self::generateSpan("insight-dump-boolean insight-dump-boolean--$isLeapYear", $isLeapYear);
+        $isLeapYearContent = HtmlRenderer::wrap("insight-dump-boolean insight-dump-boolean--$isLeapYear", $isLeapYear);
         $diffWithNow = $var->diff(new \DateTime())->format('%R%a jours');
 
-        $output = self::generateSpan("insight-dump-datetime", get_class($var)) ." {\n";
+        $output = HtmlRenderer::wrap("insight-dump-datetime", get_class($var)) ." {\n";
         $output .= "{$innerIndent}datetime: $dateString,\n";
         $output .= "{$innerIndent}timezone: $timezone,\n";
         $output .= "{$innerIndent}timestamp: $timestamp,\n";
@@ -87,7 +87,7 @@ final class Render
         $output .= "{$innerIndent}diffWithNow: $diffWithNow\n";
         $output .= "$indent}";
 
-        return self::generateSpan("insight-dump-datetime-content", $output);
+        return HtmlRenderer::wrap("insight-dump-datetime-content", $output);
     }
 
     /**
@@ -97,7 +97,7 @@ final class Render
      */
     private static function getNull(): string
     {
-        return self::generateSpan("insight-dump-null", "null");
+        return HtmlRenderer::wrap("insight-dump-null", "null");
     }
 
     /**
@@ -115,8 +115,8 @@ final class Render
         $objectId = spl_object_id($var);
 
         if (isset($visited[$objectId])) {
-            $classNameContent = self::generateSpan("insight-dump-object", $className);
-            $objectIdContent = self::generateSpan("insight-dump-object-id", "#$objectId");
+            $classNameContent = HtmlRenderer::wrap("insight-dump-object", $className);
+            $objectIdContent = HtmlRenderer::wrap("insight-dump-object-id", "#$objectId");
 
             return sprintf('%s %s', $classNameContent, $objectIdContent);
         }
@@ -128,8 +128,8 @@ final class Render
         $properties = $reflection->getProperties();
         $indent = str_repeat('  ', $indentLevel);
 
-        $classNameContent = self::generateSpan("insight-dump-object", $className);
-        $objectIdContent = self::generateSpan("insight-dump-object-id", "#$objectId");
+        $classNameContent = HtmlRenderer::wrap("insight-dump-object", $className);
+        $objectIdContent = HtmlRenderer::wrap("insight-dump-object-id", "#$objectId");
 
         if (empty($properties)) {
             return "$classNameContent::class";
@@ -149,7 +149,7 @@ final class Render
             ;
 
             $renderedValue = self::render($propertyValue, $indentLevel + 1, $visited);
-            $propsOutput[] = sprintf('%s%s<span class="insight-dump-object-key">%s</span>: %s,', $innerIndent, $prefix, $propertyName, $renderedValue);
+            $propsOutput[] = sprintf('%s%s<span class="insight-dump-object-key">%s</span>: %s,', $innerIndent, $prefix, $propertyName, self::isString($renderedValue));
         }
 
         if (!empty($propsOutput)) {
@@ -184,10 +184,13 @@ final class Render
                 $blocked = $meta['blocked'] ? 'true' : 'false';
                 $seekable = $meta['seekable'] ? 'true' : 'false';
 
+                $blockedContent = HtmlRenderer::wrap("insight-dump-boolean insight-dump-boolean--$blocked", $blocked);
+                $seekableContent = HtmlRenderer::wrap("insight-dump-boolean insight-dump-boolean--$seekable", $seekable);
+
                 $output .= "{$innerIndent}uri: $uri,\n";
                 $output .= "{$innerIndent}mode: $mode,\n";
-                $output .= "{$innerIndent}blocked: <span class=\"insight-dump-boolean insight-dump-boolean--$blocked\">$blocked</span>,\n";
-                $output .= "{$innerIndent}seekable: <span class=\"insight-dump-boolean insight-dump-boolean--$seekable\">$seekable</span>\n";
+                $output .= "{$innerIndent}blocked: $blockedContent,\n";
+                $output .= "{$innerIndent}seekable: $seekableContent\n";
 
                 if (isset($meta['stream_type']) && $meta['stream_type'] === 'tcp_socket/ssl') {
                     $crypto = var_export($meta['crypto'], true);
@@ -197,16 +200,16 @@ final class Render
 
             $output .= "$indent}";
 
-            return "<span class=\"insight-dump-resource\">$output</span>";
+            return HtmlRenderer::wrap("insight-dump-resource", $output);
         }
 
         // Fallback si l'argument n'est pas une ressource (utile pour PHP 8.0+ où certaines "ressources" sont des objets)
         if (is_object($var)) {
             $className = get_class($var);
-            return "<span class=\"insight-dump-resource\">Object of class $className</span>";
+            return HtmlRenderer::wrap("insight-dump-resource", "Object of class $className");
         }
 
-        return '<span class="insight-dump-resource">Not a resource</span>';
+        return HtmlRenderer::wrap("insight-dump-resource", 'Not a ressource');
     }
 
     /**
@@ -224,7 +227,8 @@ final class Render
         $innerIndent = $indent . '  ';
         $count = is_countable($var) || $var instanceof \Countable ? count($var) : iterator_count($var);
         $getType = is_object($var) ? get_class((object)$var) : 'array';
-        $output = "<span class=\"insight-dump-type\">$getType($count):</span> [";
+        $getTypeContent = HtmlRenderer::wrap("insight-dump-type", "$getType($count):");
+        $output = "$getTypeContent [";
 
         if ($count === 0) {
             $output .= ' ]';
@@ -233,8 +237,16 @@ final class Render
             $itemsOutput = [];
 
             foreach ($var as $key => $value) {
-                $renderedValue = self::render($value, $indentLevel + 1, $visited);
-                $keyOutput = is_string($key) ? "'<span class=\"insight-dump-string\">$key</span>'" : '<span class="insight-dump-array-key">'. $key .'</span>';
+                $renderedValue = self::render(self::isString($value), $indentLevel + 1, $visited);
+
+                $keyOutput = is_string($key)
+                    ? (is_object($var)
+                        ? HtmlRenderer::wrap("insight-dump-object-key", $key)
+                        : "'". HtmlRenderer::wrap("insight-dump-string", $key) ."'"
+                    )
+                    : HtmlRenderer::wrap("insight-dump-array-key", $key)
+                ;
+
                 $separator = is_object($var) ? ': ' : ' => ';
 
                 $itemsOutput[] = sprintf('%s%s%s%s,', $innerIndent, $keyOutput, $separator, $renderedValue);
@@ -259,7 +271,7 @@ final class Render
      */
     private static function getString(string $var): string
     {
-        return self::generateSpan("insight-dump-string", $var);
+        return HtmlRenderer::wrap("insight-dump-string", $var);
     }
 
     /**
@@ -269,7 +281,7 @@ final class Render
      */
     private static function getNumber(int|float $var): string
     {
-        return self::generateSpan("insight-dump-number", $var);
+        return HtmlRenderer::wrap("insight-dump-number", (string)$var);
     }
 
     /**
@@ -280,22 +292,11 @@ final class Render
     private static function getBoolean(bool $var): string
     {
         $boolean = $var ? 'true' : 'false';
-        return self::generateSpan("insight-dump-boolean insight-dump-boolean--$boolean", $boolean);
+        return HtmlRenderer::wrap("insight-dump-boolean insight-dump-boolean--$boolean", $boolean);
     }
 
-    /**
-     * Generate a span element with specific class and content.
-     *
-     * @param string $class CSS class for the span.
-     * @param string $content Content to be wrapped by the span.
-     * @return string Generated HTML span element.
-     */
-    private static function generateSpan(string $class, string $content): string
+    private static function isString(mixed $value): mixed
     {
-        return sprintf(
-            '<span class="%s">%s</span>',
-            $class,
-            $content
-        );
+        return is_string($value) ? "'$value'" : $value;
     }
 }

@@ -24,6 +24,7 @@ final class InsightDumper
         // $output .= '<script src="Resources/js/insight-dumper.js"></script>';
 
         $output .= '<div class="insight-dump-wrapper">';
+        $output .= '<p>'. SourceMeta::getData(). '</p>';
         $output .= Render::render($vars);
         $output .= '</div>';
 
