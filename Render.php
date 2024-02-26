@@ -73,20 +73,21 @@ final class Render
         $dayOfYear = $var->format('z') + 1;
         $weekOfYear = $var->format('W');
         $isLeapYear = $var->format('L') === '1' ? 'true' : 'false';
+        $isLeapYearContent = self::generateSpan("insight-dump-boolean insight-dump-boolean--$isLeapYear", $isLeapYear);
         $diffWithNow = $var->diff(new \DateTime())->format('%R%a jours');
 
-        $output = '<span class="insight-dump-datetime">'. get_class($var) . "</span> {\n";
+        $output = self::generateSpan("insight-dump-datetime", get_class($var)) ." {\n";
         $output .= "{$innerIndent}datetime: $dateString,\n";
         $output .= "{$innerIndent}timezone: $timezone,\n";
         $output .= "{$innerIndent}timestamp: $timestamp,\n";
         $output .= "{$innerIndent}dayOfWeek: $dayOfWeek,\n";
         $output .= "{$innerIndent}dayOfYear: $dayOfYear,\n";
         $output .= "{$innerIndent}weekOfYear: $weekOfYear,\n";
-        $output .= "{$innerIndent}isLeapYear: <span class=\"insight-dump-boolean insight-dump-boolean--$isLeapYear\">$isLeapYear</span>,\n";
+        $output .= "{$innerIndent}isLeapYear: $isLeapYearContent,\n";
         $output .= "{$innerIndent}diffWithNow: $diffWithNow\n";
         $output .= "$indent}";
 
-        return "<span class=\"insight-dump-datetime-content\">$output</span>";
+        return self::generateSpan("insight-dump-datetime-content", $output);
     }
 
     /**
@@ -96,7 +97,7 @@ final class Render
      */
     private static function getNull(): string
     {
-        return '<span class="insight-dump-null">null</span>';
+        return self::generateSpan("insight-dump-null", "null");
     }
 
     /**
@@ -110,12 +111,16 @@ final class Render
      */
     private static function getObject(object $var, int $indentLevel = 0, array &$visited = []): string
     {
+        $className = get_class($var);
         $objectId = spl_object_id($var);
+
         if (isset($visited[$objectId])) {
-            return '<span class="insight-dump-object">'. get_class($var) . '</span> <span class="insight-dump-object-id">#'. $objectId .'</span>';
+            $classNameContent = self::generateSpan("insight-dump-object", $className);
+            $objectIdContent = self::generateSpan("insight-dump-object-id", "#$objectId");
+
+            return sprintf('%s %s', $classNameContent, $objectIdContent);
         }
 
-        $className = get_class($var);
         $visited[$objectId] = $className;
 
         $reflection = new \ReflectionObject($var);
@@ -123,12 +128,15 @@ final class Render
         $properties = $reflection->getProperties();
         $indent = str_repeat('  ', $indentLevel);
 
+        $classNameContent = self::generateSpan("insight-dump-object", $className);
+        $objectIdContent = self::generateSpan("insight-dump-object-id", "#$objectId");
+
         if (empty($properties)) {
-            return '<span class="insight-dump-object">'. $className .'</span>::class';
+            return "$classNameContent::class";
         }
 
         $innerIndent = str_repeat('  ', $indentLevel + 1);
-        $output = '<span class="insight-dump-object">'. $className .'</span> <span class="insight-dump-object-id">#'. $objectId ."</span> {\n";
+        $output = "$classNameContent $objectIdContent {\n";
         $propsOutput = [];
 
         foreach ($properties as $property) {
@@ -251,7 +259,7 @@ final class Render
      */
     private static function getString(string $var): string
     {
-        return '<span class="insight-dump-string">'. $var .'</span>';
+        return self::generateSpan("insight-dump-string", $var);
     }
 
     /**
@@ -261,7 +269,7 @@ final class Render
      */
     private static function getNumber(int|float $var): string
     {
-        return '<span class="insight-dump-number">'. $var .'</span>';
+        return self::generateSpan("insight-dump-number", $var);
     }
 
     /**
@@ -272,6 +280,22 @@ final class Render
     private static function getBoolean(bool $var): string
     {
         $boolean = $var ? 'true' : 'false';
-        return '<span class="insight-dump-boolean insight-dump-boolean--'. $boolean.'">'. $boolean .'</span>';
+        return self::generateSpan("insight-dump-boolean insight-dump-boolean--$boolean", $boolean);
+    }
+
+    /**
+     * Generate a span element with specific class and content.
+     *
+     * @param string $class CSS class for the span.
+     * @param string $content Content to be wrapped by the span.
+     * @return string Generated HTML span element.
+     */
+    private static function generateSpan(string $class, string $content): string
+    {
+        return sprintf(
+            '<span class="%s">%s</span>',
+            $class,
+            $content
+        );
     }
 }
