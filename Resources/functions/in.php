@@ -21,7 +21,7 @@ if (!function_exists('in')) {
     {
         $dump = null;
         $backtrace = debug_backtrace();
-        $callerInfo = $backtrace[0]; // Obtient le fichier et la ligne de l'appelant
+        $callerInfo = $backtrace[0];
 
         $file = $callerInfo['file'] ?? 'N/A';
         $line = $callerInfo['line'] ?? 'N/A';

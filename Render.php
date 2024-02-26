@@ -70,7 +70,7 @@ final class Render
         $timezone = $var->getTimezone()->getName();
         $timestamp = $var->getTimestamp();
         $dayOfWeek = $var->format('l');
-        $dayOfYear = $var->format('z') + 1;
+        $dayOfYear = (int)$var->format('z') + 1;
         $weekOfYear = $var->format('W');
         $isLeapYear = $var->format('L') === '1' ? 'true' : 'false';
         $isLeapYearContent = HtmlRenderer::wrap("insight-dump-boolean insight-dump-boolean--$isLeapYear", $isLeapYear);
@@ -170,7 +170,7 @@ final class Render
      * @param int $indentLevel The current indentation level.
      * @return string The rendered resource.
      */
-    private static function getResource($var, int $indentLevel = 0): string
+    private static function getResource(mixed $var, int $indentLevel = 0): string
     {
         if (is_resource($var)) {
             $type = get_resource_type($var);
@@ -239,13 +239,15 @@ final class Render
             foreach ($var as $key => $value) {
                 $renderedValue = self::render(self::isString($value), $indentLevel + 1, $visited);
 
-                $keyOutput = is_string($key)
-                    ? (is_object($var)
-                        ? HtmlRenderer::wrap("insight-dump-object-key", $key)
-                        : "'". HtmlRenderer::wrap("insight-dump-string", $key) ."'"
-                    )
-                    : HtmlRenderer::wrap("insight-dump-array-key", $key)
-                ;
+                if (is_string($key)) {
+                    if (is_object($var)) {
+                        $keyOutput = HtmlRenderer::wrap("insight-dump-object-key", $key);
+                    } else {
+                        $keyOutput = "'" . HtmlRenderer::wrap("insight-dump-string", $key) . "'";
+                    }
+                } else {
+                    $keyOutput = HtmlRenderer::wrap("insight-dump-array-key", $key);
+                }
 
                 $separator = is_object($var) ? ': ' : ' => ';
 
@@ -295,6 +297,12 @@ final class Render
         return HtmlRenderer::wrap("insight-dump-boolean insight-dump-boolean--$boolean", $boolean);
     }
 
+    /**
+     * Checks if the given value is a string and returns it with single quotes.
+     *
+     * @param mixed $value The value to be checked and possibly formatted.
+     * @return mixed The original string value enclosed in single quotes if it is a string; otherwise, the original value unmodified.
+     */
     private static function isString(mixed $value): mixed
     {
         return is_string($value) ? "'$value'" : $value;
