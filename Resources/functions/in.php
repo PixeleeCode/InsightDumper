@@ -18,16 +18,21 @@ if (!function_exists('in')) {
     function in(mixed ...$vars): null|string|array
     {
         $dump = null;
+        $backtrace = debug_backtrace();
+        $callerInfo = $backtrace[0]; // Obtient le fichier et la ligne de l'appelant
+
+        $file = $callerInfo['file'] ?? 'N/A';
+        $line = $callerInfo['line'] ?? 'N/A';
 
         if (!$vars) {
-            $dump = InsightDumper::dump('🫣');
+            $dump = InsightDumper::dump('🫣', $file, $line);
         }
 
         if (array_key_exists(0, $vars) && 1 === count($vars)) {
-            $dump = InsightDumper::dump($vars[0]);
+            $dump = InsightDumper::dump($vars[0], $file, $line);
         } else {
             foreach ($vars as $value) {
-                $dump .= InsightDumper::dump($value);
+                $dump .= InsightDumper::dump($value, $file, $line);
             }
         }
 

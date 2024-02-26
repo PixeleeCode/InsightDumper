@@ -9,6 +9,11 @@
     border: 1px solid #424769; /* Bordure légèrement plus claire */
 }
 
+.insight-dump-wrapper p {
+    margin: 0;
+    padding: 0 0 10px 0;
+}
+
 .insight-dump-string {
     color: #009f69; /* Jaune plus doux pour les chaînes */
 }
