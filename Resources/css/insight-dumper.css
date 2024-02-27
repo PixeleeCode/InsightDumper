@@ -30,6 +30,11 @@
     color: #07fdac;
 }
 
+.insight-dump-max-depth {
+    font-weight: bold;
+}
+
+.insight-dump-max-depth,
 .insight-dump-boolean--false {
     color: #ff3757;
 }

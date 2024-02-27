@@ -19,11 +19,18 @@ final class Render
      * @return string The rendered output.
      * @throws \ReflectionException If an error occurs during reflection.
      */
-    public static function render(mixed $var, int $indentLevel = 0, array &$visited = []): string
+    public static function render(mixed $var, int $indentLevel = 0, array &$visited = [], int $currentDepth = 0, int $maxDepth = 6): string
     {
+        if ($currentDepth > $maxDepth) {
+            return HtmlRenderer::wrap('insight-dump-max-depth', 'Max. depth reached');
+        }
+
         $output = '';
 
-        if ($var instanceof \DateTime || $var instanceof \DateTimeImmutable) {
+        if (is_null($var)) {
+            $output .= self::getNull();
+        }
+        elseif ($var instanceof \DateTime || $var instanceof \DateTimeImmutable) {
             $output .= self::getDateTimeInfo($var, $indentLevel);
         }
         elseif (is_string($var)) {
@@ -39,16 +46,13 @@ final class Render
             $output .= self::getResource($var);
         }
         elseif (($var instanceof \Iterator || $var instanceof \IteratorAggregate)) {
-            return self::renderIterable($var, $indentLevel, $visited);
+            return self::renderIterable($var, $indentLevel, $visited, $currentDepth);
         }
         elseif (is_object($var)) {
-            return self::getObject($var, $indentLevel, $visited);
+            return self::getObject($var, $indentLevel, $visited, $currentDepth);
         }
         elseif (is_iterable($var)) {
-            return self::renderIterable($var, $indentLevel, $visited);
-        }
-        elseif (is_null($var)) {
-            $output .= self::getNull();
+            return self::renderIterable($var, $indentLevel, $visited, $currentDepth);
         }
 
         return $output;
@@ -109,7 +113,7 @@ final class Render
      * @return string The rendered object.
      * @throws \ReflectionException If an error occurs during reflection.
      */
-    private static function getObject(object $var, int $indentLevel = 0, array &$visited = []): string
+    private static function getObject(object $var, int $indentLevel = 0, array &$visited = [], int $currentDepth = 0): string
     {
         $className = get_class($var);
         $objectId = spl_object_id($var);
@@ -148,7 +152,7 @@ final class Render
                 : $property->getValue($var)
             ;
 
-            $renderedValue = self::render($propertyValue, $indentLevel + 1, $visited);
+            $renderedValue = self::render($propertyValue, $indentLevel + 1, $visited, $currentDepth + 1);
             $propsOutput[] = sprintf('%s%s<span class="insight-dump-object-key">%s</span>: %s,', $innerIndent, $prefix, $propertyName, self::isString($renderedValue));
         }
 
@@ -221,7 +225,7 @@ final class Render
      * @return string The rendered iterable.
      * @throws \ReflectionException If an error occurs during reflection.
      */
-    private static function renderIterable(iterable $var, int $indentLevel = 0, array &$visited = []): string
+    private static function renderIterable(iterable $var, int $indentLevel = 0, array &$visited = [], int $currentDepth = 0): string
     {
         $indent = str_repeat('  ', $indentLevel);
         $innerIndent = $indent . '  ';
@@ -237,7 +241,7 @@ final class Render
             $itemsOutput = [];
 
             foreach ($var as $key => $value) {
-                $renderedValue = self::render(self::isString($value), $indentLevel + 1, $visited);
+                $renderedValue = self::render(self::isString($value), $indentLevel + 1, $visited, $currentDepth + 1);
 
                 if (is_string($key)) {
                     if (is_object($var)) {
