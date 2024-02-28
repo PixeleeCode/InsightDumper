@@ -19,7 +19,7 @@ final class Render
      * @return string The rendered output.
      * @throws \ReflectionException If an error occurs during reflection.
      */
-    public static function render(mixed $var, int $indentLevel = 0, array &$visited = [], int $currentDepth = 0, int $maxDepth = 6): string
+    public static function render(mixed $var, int $indentLevel = 0, array &$visited = [], int $currentDepth = 0, int $maxDepth = 8): string
     {
         if ($currentDepth > $maxDepth) {
             return HtmlRenderer::wrap('insight-dump-max-depth', 'Max. depth reached');

@@ -19,7 +19,7 @@ final class HtmlRenderer
     {
         return sprintf(
             '<%1$s class="%2$s">%3$s</%1$s>',
-            $tag,
+            !empty($tag) ? $tag : 'span',
             $class,
             $content
         );
