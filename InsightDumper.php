@@ -18,14 +18,13 @@ final class InsightDumper
      * @return string The resulting HTML code for the data display.
      * @throws \ReflectionException If an error occurs while using reflection in Render::render.
      */
-    public static function dump(mixed $vars, string $file = 'N/A', int $line = 0, float $executionTime = 0.0): string
+    public static function dump(mixed $vars, string $file = 'N/A', int $line = 0): string
     {
         $output = '<link rel="stylesheet" type="text/css" href="Resources/css/insight-dumper.css">';
-        // $output .= '<script src="Resources/js/insight-dumper.js"></script>';
+        $output .= '<script src="Resources/js/insight-dumper.js"></script>';
 
         $output .= '<div class="insight-dump-wrapper">';
         $output .= "<p>$file at line $line</p>";
-        $output .= "<p>Execution time: " . sprintf("%.4f seconds", $executionTime) . "</p>";
         $output .= Render::render($vars);
         $output .= '</div>';
 

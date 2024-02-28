@@ -31,10 +31,8 @@ $data = [
                 ]
             ]
         ]
-    ]
+    ],
+    21 => 'string',
 ];
-
-// Pour tester la récursion
-$data['niveau1']['tableauImbrique']['niveau2']['tableauPlusProfond']['niveau3']['encorePlusProfond']['niveau4']['retour'] = &$data;
 
 in($data);

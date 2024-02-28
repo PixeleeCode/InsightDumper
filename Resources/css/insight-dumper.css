@@ -54,6 +54,20 @@
     color: #F48FB1;
 }
 
+.insight-dump-type.closed::before {
+    content: '+';
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.insight-dump-type.opened::before {
+    content: '-';
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
 .insight-dump-array-key,
 .insight-dump-object,
 .insight-dump-datetime {
@@ -64,13 +78,10 @@
     cursor: pointer;
 }
 
-.insight-dump-array-header::before {
-    content: '▶';
-    display: inline-block;
-    margin-right: 5px;
+.insight-dump-array-content-opened {
+    display: inline;
 }
 
-.insight-dump-array-content {
-    margin-left: 20px;
+.insight-dump-array-content-closed {
     display: none;
 }

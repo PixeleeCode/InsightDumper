@@ -1,11 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.insight-dump-toggle').forEach(function (element) {
-        element.addEventListener('click', function () {
-            const content = this.nextElementSibling; // Assumant que le contenu est toujours juste après l'élément cliquable
-            if (content.style.display === 'none') {
-                content.style.display = ''; // Affiche le contenu
+    const toggles = document.querySelectorAll('.insight-dump-toggle');
+
+    toggles.forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+            const content = toggle.nextElementSibling;
+            if (toggle.classList.contains('opened')) {
+                toggle.classList.remove('opened');
+                toggle.classList.add('closed');
+                content.classList.remove('insight-dump-array-content-opened');
+                content.classList.add('insight-dump-array-content-closed');
             } else {
-                content.style.display = 'none'; // Cache le contenu
+                toggle.classList.remove('closed');
+                toggle.classList.add('opened');
+                content.classList.remove('insight-dump-array-content-closed');
+                content.classList.add('insight-dump-array-content-opened');
             }
         });
     });
