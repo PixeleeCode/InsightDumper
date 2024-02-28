@@ -231,7 +231,7 @@ final class Render
         $innerIndent = $indent . '  ';
         $count = is_countable($var) || $var instanceof \Countable ? count($var) : iterator_count($var);
         $getType = is_object($var) ? get_class((object)$var) : 'array';
-        $getTypeContent = HtmlRenderer::wrap("insight-dump-type", "$getType($count):");
+        $getTypeContent = HtmlRenderer::wrap("insight-dump-type insight-dump-toggle", "$getType($count):");
         $output = "$getTypeContent [";
 
         if ($count === 0) {

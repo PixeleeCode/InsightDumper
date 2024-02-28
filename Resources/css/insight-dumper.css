@@ -30,13 +30,13 @@
     color: #07fdac;
 }
 
-.insight-dump-max-depth {
-    font-weight: bold;
-}
-
 .insight-dump-max-depth,
 .insight-dump-boolean--false {
     color: #ff3757;
+}
+
+.insight-dump-max-depth {
+    font-weight: bold;
 }
 
 .insight-dump-object-id,
@@ -58,4 +58,19 @@
 .insight-dump-object,
 .insight-dump-datetime {
     color: #ffcf30;
+}
+
+.insight-dump-toggle {
+    cursor: pointer;
+}
+
+.insight-dump-array-header::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.insight-dump-array-content {
+    margin-left: 20px;
+    display: none;
 }
