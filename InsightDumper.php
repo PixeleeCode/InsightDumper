@@ -2,6 +2,8 @@
 
 namespace Pixelee\InsightDumper;
 
+use Pixelee\InsightDumper\Render\RenderResource;
+
 require_once __DIR__ . '/Resources/functions/in.php';
 
 /**
@@ -18,7 +20,7 @@ final class InsightDumper
      * @return string The resulting HTML code for the data display.
      * @throws \ReflectionException If an error occurs while using reflection in Render::render.
      */
-    public static function dump(mixed $vars, string $file = 'N/A', int $line = 0): string
+    public static function dump(mixed $vars, string $file = RenderResource::NOT_APPLICABLE, int $line = 0): string
     {
         $output = '<link rel="stylesheet" type="text/css" href="Resources/css/insight-dumper.css">';
         $output .= '<script src="Resources/js/insight-dumper.js"></script>';

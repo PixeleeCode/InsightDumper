@@ -7,6 +7,13 @@ use Pixelee\InsightDumper\Render;
 
 final class RenderObject
 {
+    /**
+     * Checks if the object has already been visited to prevent infinite recursion.
+     *
+     * @param object $var The object to check.
+     * @param array &$visited Reference to the array tracking visited objects.
+     * @return ?string Formatted HTML string for the visited object or null if not visited.
+     */
     private static function checkVisited(object $var, array &$visited): ?string
     {
         $objectId = spl_object_id($var);
@@ -19,6 +26,13 @@ final class RenderObject
         return null;
     }
 
+    /**
+     * Formats the HTML representation for an object that has already been visited.
+     *
+     * @param object $var The visited object.
+     * @param int $objectId The object ID of the visited object.
+     * @return string The formatted HTML string.
+     */
     private static function formatVisitedObject(object $var, int $objectId): string
     {
         $classNameContent = HtmlRenderer::wrap('insight-dump-object', get_class($var));
@@ -28,7 +42,14 @@ final class RenderObject
     }
 
     /**
-     * @throws \ReflectionException
+     * Renders the properties of an object, including static and instance properties.
+     *
+     * @param object $var The object whose properties are to be rendered.
+     * @param int $indentLevel The current indentation level.
+     * @param array &$visited Reference to the array tracking visited objects.
+     * @param int $currentDepth The current depth in the recursion tree.
+     * @return string The formatted HTML string of object properties.
+     * @throws \ReflectionException If an error occurs during reflection.
      */
     private static function renderProperties(object $var, int $indentLevel, array &$visited, int $currentDepth): string
     {
@@ -48,6 +69,15 @@ final class RenderObject
         return implode("\n", $propsOutput);
     }
 
+    /**
+     * Formats a single property of an object into an HTML string.
+     *
+     * @param string $propertyName The name of the property.
+     * @param string $renderedValue The rendered value of the property.
+     * @param string $prefix Indicates if the property is static.
+     * @param int $indentLevel The current indentation level.
+     * @return string The formatted HTML string for the property.
+     */
     private static function formatProperty(string $propertyName, string $renderedValue, string $prefix, int $indentLevel): string
     {
         $innerIndent = str_repeat('  ', $indentLevel);
@@ -61,7 +91,14 @@ final class RenderObject
     }
 
     /**
-     * @throws \ReflectionException
+     * Renders an object into an HTML string, including its properties and handling recursion.
+     *
+     * @param object $var The object to render.
+     * @param int $indentLevel The current indentation level.
+     * @param array &$visited Reference to the array tracking visited objects.
+     * @param int $currentDepth The current depth in the recursion tree.
+     * @return string The complete HTML representation of the object.
+     * @throws \ReflectionException If an error occurs during reflection.
      */
     public static function getObject(object $var, int $indentLevel = 0, array &$visited = [], int $currentDepth = 0): string
     {
