@@ -1,12 +1,62 @@
 # InsightDumper
 
-"InsightDumper" est un outil de débogage PHP conçu pour offrir aux développeurs une vision claire et approfondie de leurs données au moment du développement. En alliant fonctionnalités avancées de dumper de variables et une présentation visuelle colorée et intuitive, InsightDumper transforme la manière dont les développeurs interagissent avec leurs données, rendant le processus de débogage non seulement plus efficace mais également plus agréable.
+InsightDumper is a PHP debugging tool designed to provide developers with a clear and detailed view of their data during development. Combining advanced variable dumping features with a colorful and intuitive visual presentation, InsightDumper transforms the way developers interact with their data, making the debugging process not just more efficient but also enjoyable.
 
-Avec InsightDumper, vous pouvez vous attendre à :
+## Key Features
 
-- **Visualisation Améliorée** : Profitez d'une présentation colorée et structurée des données, rendant la lecture des arrays complexes, objets, et autres types de données PHP une tâche simple et directe.
-- **Intégration Facile** : InsightDumper est conçu pour s'intégrer sans effort à tout projet PHP, que vous travailliez avec un framework spécifique comme Laravel ou Symfony, ou dans un environnement PHP pur.
-- **Fonctionnalités Riches** : Du simple dump de variables à des fonctionnalités plus avancées comme le traçage de l'exécution et le profilage de performance, InsightDumper est équipé pour répondre à tous vos besoins de débogage.
-- **Personnalisation** : Personnalisez l'affichage et le comportement de InsightDumper pour qu'il corresponde parfaitement à votre workflow et à vos préférences de débogage.
+- **Enhanced Visualization**: Enjoy a colorful and structured display of data, making the inspection of complex arrays, objects, and other PHP data types straightforward and direct.
+- **Seamless Integration**: Designed for effortless integration into any PHP project, whether you're using a specific framework like Laravel or Symfony, or operating in a pure PHP environment.
+- **Rich Functionality**: From straightforward variable dumping to advanced features like execution tracing and performance profiling, InsightDumper is equipped to meet all your debugging needs.
+- **Customization**: Tailor the display and behavior of InsightDumper to perfectly match your debugging workflow and preferences.
 
-Que vous soyez un développeur solo travaillant sur votre projet passion ou une équipe développant une application PHP à grande échelle, InsightDumper est là pour illuminer votre processus de débogage avec clarté, couleur, et insight profond dans vos données. Plongez dans vos données comme jamais auparavant avec InsightDumper et transformez le débogage d'une corvée en un plaisir.
+Whether you're a solo developer working on your passion project or a team building a large-scale PHP application, InsightDumper is here to illuminate your debugging process with clarity, color, and deep insight into your data.
+
+## Installation
+
+To get started with InsightDumper, install it via Composer:
+
+```bash
+composer require pixelee/insight-dumper
+```
+
+## Usage
+
+### Standard PHP Project
+
+1. **Setup**: Include Composer's autoload file and the `in()` function file in your project.
+
+```php
+require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/pixelee/insight-dumper/Resources/functions/in.php';
+```
+
+2. **Variable Dumping**: Use the `in()` function to dump variables for debugging.
+
+```php
+$data = ['name' => 'John', 'age' => 30];
+in($data);
+```
+
+### PHP MVC Frameworks
+
+#### Laravel
+
+- **Service Provider and Facade (Optional)**: Optionally, register InsightDumper as a service provider and create a facade for an elegant syntax.
+- **Usage**: Call `in()` within your application to debug data effortlessly.
+
+```php
+// In a controller method
+$users = User::all();
+in($users);
+```
+
+#### Symfony
+
+- **Service Configuration**: Optionally, configure InsightDumper as a service in `services.yaml`.
+- **Usage**: Use `in()` in controllers or services for debugging.
+
+```php
+// In a controller action
+$users = $this->userRepository->findAll();
+in($users);
+```

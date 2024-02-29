@@ -4,8 +4,6 @@ namespace Pixelee\InsightDumper;
 
 use Pixelee\InsightDumper\Render\RenderResource;
 
-require_once __DIR__ . '/Resources/functions/in.php';
-
 /**
  * The InsightDumper class is designed to format and stylize the display of PHP data.
  * It primarily uses a static method to generate the display.
