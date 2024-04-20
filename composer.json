@@ -16,7 +16,6 @@
     "authors": [
         {
             "name": "Guillaume Bouyer",
-            "email": "guillaume.bouyer@me.com"
         }
     ],
     "minimum-stability": "dev",
